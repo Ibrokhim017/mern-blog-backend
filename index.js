@@ -1,40 +1,40 @@
 import express from "express";
-import jwt from "jsonwebtoken";
-import mongoose from "mongoose";
+// import jwt from "jsonwebtoken";
+// import mongoose from "mongoose";
+import { validationResult } from "express-validator";
 
-mongoose
-  .connect(
-    "mongodb+srv://admin:adminqwerty@cluster0.glxeezl.mongodb.net/?retryWrites=true&w=majority"
-  )
-  .then(() => console.log("DB run"))
-  .catch((err) => console.log("DB err =>", err));
+import { registerValidation } from "./validations/auth.js";
+
+// mongoose
+//   .connect(
+//     "mongodb+srv://admin:adminqwerty@cluster0.glxeezl.mongodb.net/?retryWrites=true&w=majority"
+//   )
+//   .then(() => console.log("DB run"))
+//   .catch((err) => console.log("DB err =>", err));
 
 const app = express();
 
 app.use(express.json());
 
-app.get("/", (req, res) => {
-  res.send("Hello world123");
-});
+app.post("/auth/register", registerValidation, (req, res) => {
+	console.log("req >>> ", req.body);
+	// ,
+	const errors = validationResult(req);
+	console.log("errors", errors);
 
-app.post("/auth/login", (req, res) => {
-  console.log(req.body);
+	if (!errors.isEmpty()) {
+		return res.status(400).json(errors.array());
+	}
 
-  const token = jwt.sign(
-    {
-      email: req.body.email,
-      fullname: req.body.fullname,
-    },
-    "keyString"
-  );
-
-  res.json({ success: true, token });
+	res.json({
+		req: req.body,
+		success: true
+	});
 });
 
 app.listen(4444, (err) => {
-  if (err) {
-    return console.log(err);
-  }
-
-  console.log("Server runnig");
+	if (err) {
+		return console.log(err);
+	}
+	console.log("Server runnig");
 });
