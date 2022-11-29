@@ -8,7 +8,7 @@
     "start": "node index.js",
     "start:dev": "nodemon index.js"
   },
-  "author": "",
+  "author": "Ibrokhim Ismoilov",
   "license": "ISC",
   "dependencies": {
     "bcrypt": "^5.1.0",

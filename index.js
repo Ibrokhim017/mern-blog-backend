@@ -1,6 +1,7 @@
 // import multer from "multer";
 import express from "express";
 import mongoose from "mongoose";
+// import cors from "cors"
 
 // custom files
 import { handleValidationErrors, checkAuth } from "./utils/index.js";
@@ -26,6 +27,7 @@ mongoose
 
 const app = express();
 app.use(express.json());
+// app.use(cors());
 app.use("/uploads", express.static("uploads"));
 
 // Start of Routes ==================================================================
