@@ -1,5 +1,5 @@
-import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+import bcrypt from "bcrypt";
 import { UserModel } from "../models/index.js";
 
 export const register = async (req, res) => {
@@ -8,7 +8,7 @@ export const register = async (req, res) => {
 		const salt = await bcrypt.genSalt(10);
 		const hash = await bcrypt.hash(password, salt);
 
-		const doc = UserModel({
+		const doc = new UserModel({
 			email: req.body.email,
 			fullName: req.body.fullName,
 			avatarUrl: req.body.avatarUrl,
@@ -29,18 +29,21 @@ export const register = async (req, res) => {
 
 		const { passwordHash, ...userData } = user._doc;
 
-		res.json({ ...userData, token });
-	} catch (error) {
+		res.json({
+			...userData,
+			token,
+		});
+	} catch (err) {
 		console.log(err);
 		res.status(500).json({
-			message: "Не удалось регистраться",
+			message: "Не удалось зарегистрироваться",
 		});
 	}
 };
 
 export const login = async (req, res) => {
 	try {
-		const user = await UserModel({ email: req.body.email });
+		const user = await UserModel.findOne({ email: req.body.email });
 
 		if (!user) {
 			return res.status(404).json({
@@ -67,7 +70,11 @@ export const login = async (req, res) => {
 		);
 
 		const { passwordHash, ...userData } = user._doc;
-		res.json({ ...userData, token });
+
+		res.json({
+			...userData,
+			token,
+		});
 	} catch (err) {
 		console.log(err);
 		res.status(500).json({
@@ -87,10 +94,11 @@ export const getMe = async (req, res) => {
 		}
 
 		const { passwordHash, ...userData } = user._doc;
+
 		res.json(userData);
 	} catch (err) {
 		console.log(err);
-		return res.status(403).json({
+		res.status(500).json({
 			message: "Нет доступа",
 		});
 	}

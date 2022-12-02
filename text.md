@@ -1,6 +1,6 @@
 mongoose
 
-mongodb+srv://admin:<password>@cluster0.glxeezl.mongodb.net/?retryWrites=true&w=majority
+mongodb+srv://admin:<password>@cluster.1nhr8qr.mongodb.net/?retryWrites=true&w=majority
 
 login: admin
-password: adminqwerty
+password: 7WmcJUs4xbpM0A8p
